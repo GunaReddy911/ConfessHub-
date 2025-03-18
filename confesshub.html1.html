@@ -1,0 +1,76 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConfessHub - Authentication</title>
+</head>
+<body>
+    <h1>Welcome to ConfessHub</h1>
+    
+    <!-- Login Button -->
+    <button id="login-btn">Sign in with Google</button>
+    
+    <!-- Logout Button -->
+    <button id="logout-btn" style="display:none;">Logout</button>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Firebase Config (Replace with your actual Firebase project details)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCYOmFbm7UMuIofXlDfD4yRPSRGNKrI4Sk",
+  authDomain: "confesshub-a402a.firebaseapp.com",
+  projectId: "confesshub-a402a",
+  storageBucket: "confesshub-a402a.firebasestorage.app",
+  messagingSenderId: "131827033249",
+  appId: "1:131827033249:web:c4bfbf9d136690ebbc7ce0",
+  measurementId: "G-HH4NYC88MT"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // Get button elements
+        const loginBtn = document.getElementById("login-btn");
+        const logoutBtn = document.getElementById("logout-btn");
+
+        // Google Login (Popup)
+        loginBtn.addEventListener("click", () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    console.log("Login successful:", result.user);
+                    alert("Login successful!");
+                })
+                .catch((error) => {
+                    console.error("Login failed:", error);
+                });
+        });
+
+        // Logout Function
+        logoutBtn.addEventListener("click", () => {
+            signOut(auth).then(() => {
+                alert("Logged out!");
+            }).catch((error) => {
+                console.error("Logout failed:", error);
+            });
+        });
+
+        // Track Authentication State
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginBtn.style.display = "none";
+                logoutBtn.style.display = "block";
+            } else {
+                loginBtn.style.display = "block";
+                logoutBtn.style.display = "none";
+            }
+        });
+
+    </script>
+</body>
+</html>
